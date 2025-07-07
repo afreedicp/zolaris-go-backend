@@ -108,3 +108,13 @@ func (s *EntityService) GetCategoryType(ctx context.Context, categoryId string) 
 
 	return s.repo.GetCategoryType(ctx, categoryId)
 }
+
+
+
+func (s *EntityService) GetEntityID(ctx context.Context, userId string) (string, error) {
+	if userId == "" {
+		return "", fmt.Errorf("user ID is empty")
+	}
+
+	return s.repo.GetEntityID(ctx, userId) // You must have this repo method implemented
+}

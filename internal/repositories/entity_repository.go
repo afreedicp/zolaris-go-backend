@@ -563,3 +563,16 @@ func (r *EntityRepository) ListEntityChildren(ctx context.Context, entityId stri
 
 	return entities, nil
 }
+
+func (r *EntityRepository) GetEntityID(ctx context.Context, userId string) (string, error) {
+    var entityID string
+    query := `SELECT entity_id FROM z_entity WHERE user_id = $1 LIMIT 1`
+    err := r.db.QueryRow(ctx, query, userId).Scan(&entityID)
+    if err != nil {
+        if err == pgx.ErrNoRows {
+            return "", fmt.Errorf("no entity found for user ID %s", userId)
+        }
+        return "", fmt.Errorf("failed to get entity ID: %w", err)
+    }
+    return entityID, nil
+}

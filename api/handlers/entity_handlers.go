@@ -268,24 +268,31 @@ func (h *EntityHandler) HandleGetEntityHierarchy(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Router /user/has-entity [get]
 func (h *EntityHandler) HandleCheckEntityPresence(c *gin.Context) {
-	// Get user ID from context (set by auth middleware)
 	userID := middleware.GetUserIDFromGin(c)
 	if userID == "" {
 		response.Unauthorized(c, "User not authenticated")
 		return
 	}
 
-	// Call service to check entity presence
-	hasEntity, err := h.entityService.CheckEntityExists(
-		c.Request.Context(),
-		userID,
-	)
+	// Check if the user has an entity
+	hasEntity, err := h.entityService.CheckEntityExists(c.Request.Context(), userID)
 	if err != nil {
 		log.Printf("Error checking entity presence: %v", err)
 		response.InternalError(c, "Failed to check entity presence")
 		return
 	}
 
-	result := map[string]bool{"hasEntity": hasEntity}
+	result := map[string]interface{}{"hasEntity": hasEntity}
+
+	if hasEntity {
+		entityID, err := h.entityService.GetEntityID(c.Request.Context(), userID)
+		if err != nil {
+			log.Printf("Error fetching entity ID: %v", err)
+			response.InternalError(c, "Failed to fetch entity ID")
+			return
+		}
+		result["entityId"] = entityID
+	}
+
 	response.OK(c, result, "Entity presence check successful")
 }
