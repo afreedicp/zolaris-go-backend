@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"n1h41/zolaris-backend-app/internal/domain"
-	"n1h41/zolaris-backend-app/internal/repositories"
+	"github.com/afreedicp/zolaris-backend-app/internal/domain"
+	"github.com/afreedicp/zolaris-backend-app/internal/repositories"
 )
 
 // EntityService provides entity-related business operations

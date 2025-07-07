@@ -3,7 +3,7 @@ package repositories
 import (
 	"context"
 
-	"n1h41/zolaris-backend-app/internal/domain"
+	"github.com/afreedicp/zolaris-backend-app/internal/domain"
 )
 
 // UserRepositoryInterface defines the operations for user data

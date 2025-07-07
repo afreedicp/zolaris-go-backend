@@ -5,12 +5,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"n1h41/zolaris-backend-app/internal/middleware"
-	"n1h41/zolaris-backend-app/internal/services"
-	"n1h41/zolaris-backend-app/internal/transport/dto"
-	"n1h41/zolaris-backend-app/internal/transport/mappers"
-	"n1h41/zolaris-backend-app/internal/transport/response"
-	"n1h41/zolaris-backend-app/internal/utils"
+	"github.com/afreedicp/zolaris-backend-app/internal/middleware"
+	"github.com/afreedicp/zolaris-backend-app/internal/services"
+	"github.com/afreedicp/zolaris-backend-app/internal/transport/dto"
+	"github.com/afreedicp/zolaris-backend-app/internal/transport/mappers"
+	"github.com/afreedicp/zolaris-backend-app/internal/transport/response"
+	"github.com/afreedicp/zolaris-backend-app/internal/utils"
 )
 
 // EntityHandler handles all entity-related HTTP requests
