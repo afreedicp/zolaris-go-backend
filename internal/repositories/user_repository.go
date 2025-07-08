@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"time"
-
+"log"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -383,4 +383,32 @@ func (r *UserRepository) ListReferredUsers(ctx context.Context, userID string) (
 	}
 
 	return users, nil
+}
+
+
+// UpdateUserParentID updates the parent_id field for a specific user in the z_users table.
+// It accepts a *string for parentID to correctly handle NULL values in the database.
+func (r *UserRepository) UpdateUserParentID(ctx context.Context, userID string, parentID *string) error {
+	// The query to update the parent_id and updated_at timestamp for a given user.
+	 log.Println("ERROR: r.db is nil in UpdateUserParentID!")
+	// Assuming 'id' is the primary key column for the user in z_users.
+	  if r.db == nil {
+        log.Println("ERROR: r.db is nil in UpdateUserParentID!")
+        return fmt.Errorf("database connection is not initialized")
+    }
+	query := `UPDATE z_users SET parent_id = $1, updated_at = NOW() WHERE user_id = $2`
+
+	result, err := r.db.Exec(ctx, query, parentID, userID)
+	if err != nil {
+		return fmt.Errorf("error updating user parent_id for user %s: %w", userID, err)
+	}
+
+	// Check how many rows were affected to verify the update occurred.
+	rowsAffected := result.RowsAffected()
+	if rowsAffected == 0 {
+		log.Printf("Warning: No user found with ID %s to update parent_id", userID)
+		// Depending on your business logic, you might want to return an error here
+		// if it's critical that the user exists for the update to succeed.
+	}
+	return nil
 }

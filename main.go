@@ -73,7 +73,7 @@ func main() {
 	policyService := services.NewPolicyService(policyRepo, cfg.AWS.IoTPolicy)
 	categoryService := services.NewCategoryService(categoryRepo)
 	userService := services.NewUserService(userRepo)
-	entityService := services.NewEntityService(entityRepo)
+	entityService := services.NewEntityService(entityRepo, userRepo)
 
 	// Initialize handlers
 	entityHandler := handlers.NewEntityHandler(entityService)

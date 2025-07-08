@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -51,8 +50,20 @@ func (r *EntityRepository) GetCategoryType(ctx context.Context, categoryId strin
 		}
 		return "", fmt.Errorf("failed to get category type: %w", err)
 	}
-
 	return CategoryType(categoryType), nil
+}
+
+func (r *EntityRepository) GetCategoryIDByEntityID(ctx context.Context, entityID string) (string, error) {
+	var categoryID string
+	query := `SELECT category_id FROM z_entity WHERE entity_id = $1`
+	err := r.db.QueryRow(ctx, query, entityID).Scan(&categoryID)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return "", fmt.Errorf("entity with ID %s not found", entityID)
+		}
+		return "", fmt.Errorf("failed to get category ID: %w", err)
+	}
+	return categoryID, nil
 }
 
 func (r *EntityRepository) CreateRootEntity(ctx context.Context, categoryId string, entityName string, userId string, details map[string]any) (string, error) {
@@ -576,3 +587,6 @@ func (r *EntityRepository) GetEntityID(ctx context.Context, userId string) (stri
     }
     return entityID, nil
 }
+
+
+
